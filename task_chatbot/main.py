@@ -1,24 +1,24 @@
 import json
+import os
 import pickle
+import time
 
 from dialogue_agent.agent import DQNAgentSplit
 from dialogue_agent.dialog_config import feasible_agent_actions
-from dialogue_agent.gui.chat_application import ChatApplication
 from dialogue_agent.state_tracker import StateTracker
 from dialogue_agent.user import RulebasedUsersim
-from task_chatbot.user import User
 from numpy import mean
 
-MODEL_FILE_PATH = "task_chatbot/resources/agent_models"
+from task_chatbot.gui.chat_application import ChatApplication
+from task_chatbot.locations import RESOURCES_PATH, MODEL_FILE_PATH
+from task_chatbot.user import User
 
 
 class Dialogue:
 
     def __init__(self, load_agent_model_from_directory: str = None):
         # Load database of movies (if you get an error unpickling movie_db.pkl then run pickle_converter.py)
-        database = pickle.load(
-            open(r"C:\Users\alexander.zap\PycharmProjects\dialogue-agent\dialogue_agent\resources\movie_db.pkl", "rb"),
-            encoding="latin1")
+        database = pickle.load(open(os.path.join(RESOURCES_PATH, "movie_db.pkl"), "rb"), encoding="latin1")
 
         # Create state tracker
         self.state_tracker = StateTracker(database)
@@ -33,7 +33,7 @@ class Dialogue:
         self.gui = ChatApplication()
 
         # Create user instance for direct text interactions
-        self.user_interactive = User(nlu_path=r"task_chatbot/user/regex_nlu.json", use_voice=False, gui=self.gui)
+        self.user_interactive = User(nlu_path=r"user/regex_nlu.json", use_voice=False, gui=self.gui)
 
         # Create empty user (will be assigned on runtime)
         self.user = None
