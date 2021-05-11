@@ -25,15 +25,14 @@ class Dialogue:
 
         # Create user simulator with list of user goals
         self.user_simulated = RulebasedUsersim(
-            json.load(open(
-                r"C:\Users\alexander.zap\PycharmProjects\dialogue-agent\dialogue_agent\resources\movie_user_goals.json",
-                "r", encoding="utf-8")))
+            json.load(open(os.path.join(RESOURCES_PATH, "movie_user_goals,json"), "r", encoding="utf-8")))
 
         # Create GUI for direct text interactions
         self.gui = ChatApplication()
 
         # Create user instance for direct text interactions
-        self.user_interactive = User(nlu_path=r"user/regex_nlu.json", use_voice=False, gui=self.gui)
+        self.user_interactive = User(nlu_path=os.path.join(RESOURCES_PATH, "user_nlu_regex.json"),
+                                     use_voice=False, gui=self.gui)
 
         # Create empty user (will be assigned on runtime)
         self.user = None
