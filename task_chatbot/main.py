@@ -11,6 +11,7 @@ from numpy import mean
 
 from task_chatbot.gui.chat_application import ChatApplication
 from task_chatbot.locations import RESOURCES_PATH, MODEL_FILE_PATH
+from task_chatbot.nlg import AgentNLG
 from task_chatbot.user import User
 
 
@@ -43,8 +44,13 @@ class Dialogue:
                                    observation_dim=(StateTracker.state_size()),
                                    batch_size=256, memory_len=80000, prioritized_memory=True,
                                    replay_iter=16, replace_target_iter=200)
+
+        # Load agent if a model file path was specified
         if load_agent_model_from_directory:
             self.agent.load_agent_model(load_agent_model_from_directory)
+
+        # Create agent NLG
+        self.agent_nlg = AgentNLG()
 
     def run(self, n_episodes, step_size=100, warm_up=False, interactive=False, learning=True):
         """
@@ -144,7 +150,7 @@ class Dialogue:
         # 2) Update state tracker with the agent's action
         self.state_tracker.update_state_agent(agent_action)
         if interactive:
-            self.gui.insert_message(agent_action.to_utterance(), "Shop Assistant")
+            self.gui.insert_message(self.agent_nlg(agent_action), "Shop Assistant")
         # print(agent_action)
         # 3) User takes action given agent action
         user_action, reward, done, success = self.user.get_action(agent_action)

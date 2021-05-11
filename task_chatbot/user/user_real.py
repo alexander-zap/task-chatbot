@@ -1,20 +1,18 @@
 import copy
-import json
-import re
-from collections import namedtuple
 
 from dialogue_agent.action.useraction import UserAction
-from dialogue_agent.dialog_config import max_round_num, all_slots, slot_name_translations
+from dialogue_agent.dialog_config import max_round_num, all_slots
 from dialogue_agent.util_functions import reward_function, agent_action_answered_user_request
 
 from task_chatbot.gui.chat_application import ChatApplication
+from task_chatbot.nlu import IntentEntityClassifier
 
 
 class User(object):
     """" Class for interaction with real users """
 
     def __init__(self, nlu_path: str, gui: ChatApplication, use_voice=False):
-        self.nlu_path = nlu_path
+        self.nlu_classifier = IntentEntityClassifier(nlu_path)
         self.gui = gui
         self.use_voice = use_voice
         self.turn = 0
@@ -168,26 +166,5 @@ class User(object):
         self.user_action.inform_slots[inform_slot] = inform_value
 
     def nlu_classify(self, utterance):
-        regex_entries = []
-        with open(self.nlu_path, encoding="utf-8") as regex_nlu_file:
-            regex_nlu = json.load(regex_nlu_file)
-            for regex_entry in regex_nlu['patterns']:
-                regex_entries.append((regex_entry['pattern'], regex_entry['intent'], regex_entry['entities']))
-
-        nlu_response = namedtuple("NLU_Response", "intent entities")
-
-        slot_translations = dict((k.lower(), v) for k, v in slot_name_translations.items())
-
-        for pattern, intent, entity_keys in regex_entries:
-            entity_dict = {}
-            if re.match(pattern, utterance):
-                match = re.search(pattern, utterance)
-                groups = match.groups()
-                for i in range(len(groups)):
-                    entity_value = groups[i]
-                    if "slot_name" in entity_keys and entity_value in slot_translations.keys():
-                        entity_value = slot_translations[entity_value]
-                    entity_dict.update({entity_keys[i]: entity_value})
-                return nlu_response(intent, entity_dict)
-
-        return None
+        """ Classify the intents and entities of a given utterance """
+        return self.nlu_classifier(utterance)
