@@ -1,8 +1,9 @@
 import os
 import tkinter as tk
 
+from speech2text import Speech2Text
+
 from task_chatbot.locations import RESOURCES_PATH, GUI_IMG_PATH
-from dialogue_agent.user.speech_to_text import SpeechToText
 
 GRAY_COLOR = "#ABB2B9"
 DARK_BLUE_COLOR = "#17202A"
@@ -17,7 +18,7 @@ class ChatApplication:
         self._setup_main_window()
         self.wait_state = False
         self.last_message = ""
-        self.speech_to_text = SpeechToText(
+        self.speech_to_text = Speech2Text(
             model_file_path=os.path.join(RESOURCES_PATH, "deepspeech-model", "german_output_graph.pbmm"),
             scorer_file_path=os.path.join(RESOURCES_PATH, "deepspeech-model", "german_kenlm.scorer"),
             beam_width=500, lm_alpha=0.75, lm_beta=1.85)
