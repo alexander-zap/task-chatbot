@@ -1,7 +1,7 @@
 import copy
 
+import dialogue_agent.dialog_config as dia_config
 from dialogue_agent.action.useraction import UserAction
-from dialogue_agent.dialog_config import max_round_num, all_slots
 from dialogue_agent.util_functions import reward_function, agent_action_answered_user_request
 
 from task_chatbot.gui.chat_application import ChatApplication
@@ -71,7 +71,7 @@ class User(object):
         success = 0
 
         # End dialogue immediately if turn maximum is reached or if agent is done
-        if self.turn >= max_round_num:
+        if self.turn >= dia_config.config.max_round_num:
             done = True
             success = -1
             self.user_action.intent = 'done'
@@ -153,7 +153,7 @@ class User(object):
                 print("I did not understand you. Please rephrase your answer.")
             else:
                 user_entities = user_nlu_response[1]
-                if 'slot_name' in user_entities and user_entities['slot_name'] not in all_slots:
+                if 'slot_name' in user_entities and user_entities['slot_name'] not in dia_config.config.all_slots:
                     print("I do not have any information about the slot '{}'. Please rephrase your answer."
                           .format(user_entities['slot_name']))
                     user_nlu_response = None

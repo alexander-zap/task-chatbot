@@ -3,14 +3,15 @@ import os
 import pickle
 import time
 
+import dialogue_agent.dialog_config as dia_config
 from dialogue_agent.agent import DQNAgentSplit
-from dialogue_agent.dialog_config import feasible_agent_actions
+from dialogue_agent.dialog_config import init_config
 from dialogue_agent.state_tracker import StateTracker
 from dialogue_agent.user import RulebasedUsersim
 from numpy import mean
 
 from task_chatbot.gui.chat_application import ChatApplication
-from task_chatbot.locations import RESOURCES_PATH, MODEL_FILE_PATH
+from task_chatbot.locations import RESOURCES_PATH, MODEL_FILE_PATH, ROOT_DIR
 from task_chatbot.nlg import AgentNLG
 from task_chatbot.user import User
 
@@ -18,6 +19,8 @@ from task_chatbot.user import User
 class Dialogue:
 
     def __init__(self, load_agent_model_from_directory: str = None):
+        init_config(os.path.join(ROOT_DIR, "config.json"))
+
         # Load database of movies (if you get an error unpickling movie_db.pkl then run pickle_converter.py)
         database = pickle.load(open(os.path.join(RESOURCES_PATH, "movie_db.pkl"), "rb"), encoding="latin1")
 
@@ -40,7 +43,7 @@ class Dialogue:
 
         # Create agent
         self.agent = DQNAgentSplit(alpha=0.001, gamma=0.9, epsilon=0.5, epsilon_min=0.05,
-                                   n_actions=len(feasible_agent_actions), n_ordinals=3,
+                                   n_actions=len(dia_config.config.feasible_agent_actions), n_ordinals=3,
                                    observation_dim=(StateTracker.state_size()),
                                    batch_size=256, memory_len=80000, prioritized_memory=True,
                                    replay_iter=16, replace_target_iter=200)

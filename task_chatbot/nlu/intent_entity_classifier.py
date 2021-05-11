@@ -3,7 +3,7 @@ import re
 from collections import namedtuple
 from typing import Text
 
-from dialogue_agent.dialog_config import slot_name_translations
+import dialogue_agent.dialog_config as dia_config
 
 
 class IntentEntityClassifier:
@@ -23,7 +23,7 @@ class IntentEntityClassifier:
 
         nlu_response = namedtuple("NLU_Response", "intent entities")
 
-        slot_translations = dict((k.lower(), v) for k, v in slot_name_translations.items())
+        slot_translations = dict((k.lower(), v) for k, v in dia_config.config.slot_name_translations.items())
 
         for pattern, intent, entity_keys in regex_entries:
             entity_dict = {}

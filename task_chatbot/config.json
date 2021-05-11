@@ -1,0 +1,22 @@
+{
+  "max_round_num": 20,
+  "agent_request_slots": ["os_request", "brand", "price", "color"],
+  "agent_inform_slots": ["os_inform", "brand", "price", "color", "ticket"],
+  "no_query_slots": ["numberofpeople", "ticket"],
+  "all_intents": ["inform", "request", "thanks", "match_found", "accept", "reject", "done"],
+  "agent_rule_requests": [
+    {"intent": "request", "inform_slots": {}, "request_slots": ["os_request"]}, 
+    {"intent": "inform", "inform_slots": {"brand": "PLACEHOLDER"}, "request_slots": []}, 
+    {"intent": "request", "inform_slots": {}, "request_slots": ["price"]}, 
+    {"intent": "request", "inform_slots": {}, "request_slots": ["color"]}, 
+    {"intent": "match_found", "inform_slots": {}, "request_slots": []}, 
+    {"intent": "done", "inform_slots": {}, "request_slots": []}
+  ],
+  "slot_name_translations": {
+    "Betriebssystem? Android oder iOS": "os_request",
+    "Betriebssystem": "os_inform",
+    "Marke": "brand",
+    "Preis": "price",
+    "Farbe": "color"
+  }
+}

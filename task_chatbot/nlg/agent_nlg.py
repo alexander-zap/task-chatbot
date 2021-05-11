@@ -1,7 +1,7 @@
 from typing import Text
 
+import dialogue_agent.dialog_config as dia_config
 from dialogue_agent.action import AgentAction
-from dialogue_agent.dialog_config import slot_name_translations
 
 
 class AgentNLG:
@@ -14,7 +14,7 @@ class AgentNLG:
 
         def translate(slot_name):
             """ Translates slot_name to German by slot_name_translations lookup."""
-            reverted_slot_name_translations = {v: k for k, v in slot_name_translations.items()}
+            reverted_slot_name_translations = {v: k for k, v in dia_config.config.slot_name_translations.items()}
             if slot_name in reverted_slot_name_translations:
                 slot_name = reverted_slot_name_translations[slot_name]
             return slot_name
