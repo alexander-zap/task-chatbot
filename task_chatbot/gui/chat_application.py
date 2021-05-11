@@ -8,8 +8,8 @@ from task_chatbot.locations import RESOURCES_PATH, GUI_IMG_PATH
 GRAY_COLOR = "#ABB2B9"
 DARK_BLUE_COLOR = "#17202A"
 WHITE_COLOR = "#EAECEE"
-FONT = "Helvetica 14"
-FONT_BOLD = "Helvetica 13 bold"
+FONT = "Roboto 14"
+FONT_BOLD = "Roboto 13 bold"
 
 
 class ChatApplication:
@@ -30,34 +30,34 @@ class ChatApplication:
         self.window.bind("<Control-f>", self.toggle_fullscreen)
         self.window.bind("<Escape>", self.end_fullscreen)
 
-        background_image = tk.PhotoImage(file=os.path.join(GUI_IMG_PATH, "webpage.png"))
+        background_image = tk.PhotoImage(file=os.path.join(GUI_IMG_PATH, "kino_de.png"))
         background_label = tk.Label(master=self.window, image=background_image)
         background_label.photo = background_image
         background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
         # create nested chat frame
         nested_frame = tk.Canvas(master=self.window, highlightbackground="black", highlightthickness=1)
-        nested_frame.place(relwidth=0.22, relheight=0.75, relx=0.75, rely=0.2)
+        nested_frame.place(relwidth=0.22, relheight=0.43, relx=0.755, rely=0.53)
 
-        chat_assistant_image_frame = tk.Frame(master=nested_frame)
-        chat_assistant_image_frame.place(relwidth=0.98, relheight=0.33, relx=0.01, rely=0.01)
-        chat_assistant_image = tk.PhotoImage(file=os.path.join(GUI_IMG_PATH, "chat_assistant.gif"))
-        chat_assistant_label = tk.Label(master=chat_assistant_image_frame, image=chat_assistant_image)
-        chat_assistant_label.photo = chat_assistant_image
-        chat_assistant_label.place(x=0, y=0, relwidth=1, relheight=1)
+        # chat_assistant_image_frame = tk.Frame(master=nested_frame)
+        # chat_assistant_image_frame.place(relwidth=0.98, relheight=0.33, relx=0.01, rely=0.01)
+        # chat_assistant_image = tk.PhotoImage(file=os.path.join(GUI_IMG_PATH, "chat_assistant.gif"))
+        # chat_assistant_label = tk.Label(master=chat_assistant_image_frame, image=chat_assistant_image)
+        # chat_assistant_label.photo = chat_assistant_image
+        # chat_assistant_label.place(x=0, y=0, relwidth=1, relheight=1)
 
         chat_frame = tk.Frame(master=nested_frame, bg=WHITE_COLOR)
-        chat_frame.place(relwidth=0.98, relheight=0.65, relx=0.01, rely=0.34)
+        chat_frame.place(relwidth=0.98, relheight=0.98, relx=0.01, rely=0.01)
 
         # head label
-        head_label = tk.Label(master=chat_frame, bg=DARK_BLUE_COLOR, fg=WHITE_COLOR, text="Welcome", font=FONT_BOLD)
-        head_label.place(relwidth=1, rely=0.01)
+        # head_label = tk.Label(master=chat_frame, bg=DARK_BLUE_COLOR, fg=WHITE_COLOR, text="Welcome", font=FONT_BOLD)
+        # head_label.place(relwidth=1, rely=0.01)
 
         # text widget
         self.text_widget = tk.Text(master=chat_frame, width=20, height=2, bg=DARK_BLUE_COLOR, fg=WHITE_COLOR,
                                    font=FONT,
                                    padx=5, pady=5, wrap=tk.WORD)
-        self.text_widget.place(relheight=0.745, relwidth=0.96, rely=0.08)
+        self.text_widget.place(relheight=0.8, relwidth=0.96, rely=0.01)
         self.text_widget.configure(cursor="arrow", state=tk.DISABLED)
 
         # scroll bar

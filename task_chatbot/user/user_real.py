@@ -136,7 +136,9 @@ class User(object):
         if nlu_response_intent != 'yes':
             self.constraint_check = False
 
-        if self.constraint_check:
+        if nlu_response_intent == 'done':
+            self.user_action.intent = 'done'
+        elif self.constraint_check:
             self.user_action.intent = 'accept'
         else:
             self.user_action.intent = 'reject'

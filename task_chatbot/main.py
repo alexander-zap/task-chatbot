@@ -25,7 +25,7 @@ class Dialogue:
 
         # Create user simulator with list of user goals
         self.user_simulated = RulebasedUsersim(
-            json.load(open(os.path.join(RESOURCES_PATH, "movie_user_goals,json"), "r", encoding="utf-8")))
+            json.load(open(os.path.join(RESOURCES_PATH, "movie_user_goals.json"), "r", encoding="utf-8")))
 
         # Create GUI for direct text interactions
         self.gui = ChatApplication()
@@ -174,8 +174,7 @@ class Dialogue:
 
 
 if __name__ == "__main__":
-    dialogue = Dialogue(
-        load_agent_model_from_directory=r"C:\Users\alexander.zap\PycharmProjects\dialogue-agent\dialogue_agent\resources\agent_models\20210409-115432.h5")
+    dialogue = Dialogue(load_agent_model_from_directory=os.path.join(MODEL_FILE_PATH, "20210409-115432.h5"))
     # print("########################\n--- STARTING WARM UP ---\n########################")
     # dialogue.run(n_episodes=4000, warm_up=True)
     # print("########################\n--- STARTING TRAINING ---\n#########################")
