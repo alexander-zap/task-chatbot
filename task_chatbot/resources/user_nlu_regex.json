@@ -16,6 +16,27 @@
       ]
     },
     {
+      "pattern": "(.*) (?:bitte|gerne)",
+      "intent": "inform_short",
+      "entities": [
+        "slot_value"
+      ]
+    },
+    {
+      "pattern": "(?:ich möchte|ich will|ich würde)(?: gerne| bitte)? (.*) (?:sehen|schauen)",
+      "intent": "inform_short",
+      "entities": [
+        "slot_value"
+      ]
+    },
+    {
+      "pattern": "(?:nein )?(?:gerne|bitte|lieber|ich möchte|ich will|ich hätte)(?: gerne| bitte)? (.*)",
+      "intent": "inform_short",
+      "entities": [
+        "slot_value"
+      ]
+    },
+    {
       "pattern": "danke",
       "intent": "thanks",
       "entities": []

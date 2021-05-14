@@ -8,7 +8,7 @@ from task_chatbot.locations import RESOURCES_PATH, GUI_IMG_PATH
 GRAY_COLOR = "#ABB2B9"
 DARK_BLUE_COLOR = "#17202A"
 WHITE_COLOR = "#EAECEE"
-FONT = "Roboto 14"
+FONT = "Roboto 13"
 FONT_BOLD = "Roboto 13 bold"
 
 

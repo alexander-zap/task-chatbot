@@ -34,8 +34,10 @@ class AgentNLG:
                     agent_utterance = "Ich konnte leider kein passendes Ticket finden."
                 else:
                     match_string = "\n".join(
-                        [f"{slot}: {value}" for slot, value in agent_action.inform_slots.items()]
+                        [f"| {translate(slot)}: {value}" for slot, value in agent_action.inform_slots.items()]
                     )
+                    line_sep = "\n+---------------------------------------\n"
+                    match_string = line_sep + match_string + line_sep
                     agent_utterance = f"Kann ich Ihnen folgendes Ticket empfehlen?\n{match_string}"
         elif agent_action.intent == 'request':
             request_slot_key = translate(agent_action.request_slots[0])

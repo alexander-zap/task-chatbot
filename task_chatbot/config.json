@@ -6,6 +6,7 @@
   "agent_inform_slots": ["moviename", "theater", "starttime", "date", "genre", "state", "city", "zip", "critic_rating",
     "mpaa_rating", "distanceconstraints", "video_format", "theater_chain", "price", "actor",
     "description", "other", "numberofkids", "ticket"],
+  "default_start_slot": "moviename",
   "no_query_slots": ["numberofpeople", "ticket"],
   "all_intents": ["inform", "request", "thanks", "match_found", "accept", "reject", "done"],
   "agent_rule_requests": [
@@ -51,6 +52,7 @@
     "Anzahl Kinder": "numberofkids",
     "Personen": "numberofpeople",
     "Personenzahl": "numberofpeople",
-    "Anzahl Personen": "numberofpeople"
+    "Anzahl Personen": "numberofpeople",
+    "Ticket": "ticket"
   }
 }

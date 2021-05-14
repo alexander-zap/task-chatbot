@@ -1,7 +1,7 @@
 import copy
 
 import dialogue_agent.dialog_config as dia_config
-from dialogue_agent.action.useraction import UserAction
+from dialogue_agent.action import UserAction, AgentAction
 from dialogue_agent.util_functions import reward_function, agent_action_answered_user_request
 
 from task_chatbot.gui.chat_application import ChatApplication
@@ -18,6 +18,7 @@ class User(object):
         self.turn = 0
         self.user_action = UserAction()
         self.request_slots = []
+        self.latest_agent_slot = dia_config.config.default_start_slot
         self.constraint_check = False
 
     def reset(self) -> None:
@@ -45,15 +46,22 @@ class User(object):
         user_started_correctly = False
         while not user_started_correctly:
             nlu_response = self.ask_for_input()
+            entities = nlu_response.entities
             self.user_action.intent = nlu_response.intent
+
             if self.user_action.intent == "inform":
-                self.add_inform_to_action(nlu_response.entities["slot_name"], nlu_response.entities["slot_value"])
+                self.add_inform_to_action(entities["slot_name"], entities["slot_value"])
+                user_started_correctly = True
+            elif self.user_action.intent == "inform_short":
+                self.user_action.intent = 'inform'
+                self.add_inform_to_action(self.latest_agent_slot, entities["slot_value"])
                 user_started_correctly = True
             elif self.user_action.intent == "request":
-                self.request_slots.append(nlu_response.entities["slot_name"])
+                self.request_slots.append(entities["slot_name"])
                 user_started_correctly = True
             else:
-                print("Please start with an inform or a request.")
+                self.gui.insert_message("Please start with an inform or a request.", "System")
+
         self.user_action.request_slots = copy.deepcopy(self.request_slots)
 
         done = False
@@ -62,10 +70,17 @@ class User(object):
 
         return self.user_action, reward, done, success
 
-    def get_next_action(self, agent_action):
+    def get_next_action(self, agent_action: AgentAction):
         """ Get next user action based on user input """
 
         agent_intent = agent_action.intent
+
+        if agent_intent == "request":
+            self.latest_agent_slot = agent_action.request_slots[0]
+        elif agent_intent == "inform":
+            self.latest_agent_slot = list(agent_action.inform_slots.keys())[0]
+        else:
+            self.latest_agent_slot = None
 
         done = False
         success = 0
@@ -109,6 +124,14 @@ class User(object):
             self.user_action.intent = 'inform'
             self.add_inform_to_action(entities["slot_name"], entities["slot_value"])
 
+        if user_intent == 'inform_short':
+            if self.latest_agent_slot:
+                self.user_action.intent = 'inform'
+                self.add_inform_to_action(self.latest_agent_slot, entities["slot_value"])
+            else:
+                self.gui.insert_message(
+                    "Informing slot value without slot name not possible without slot name context.", "System")
+
         elif user_intent == 'request':
             self.user_action.intent = 'request'
             self.request_slots.append(entities["slot_name"])
@@ -150,12 +173,13 @@ class User(object):
                 user_utterance = self.gui.wait_for_user_message().lower()
             user_nlu_response = self.nlu_classify(user_utterance)
             if not user_nlu_response:
-                print("I did not understand you. Please rephrase your answer.")
+                self.gui.insert_message("I did not understand you. Please rephrase your answer.", "System")
             else:
                 user_entities = user_nlu_response[1]
                 if 'slot_name' in user_entities and user_entities['slot_name'] not in dia_config.config.all_slots:
-                    print("I do not have any information about the slot '{}'. Please rephrase your answer."
-                          .format(user_entities['slot_name']))
+                    self.gui.insert_message(
+                        f"I do not have any information about the slot '{user_entities['slot_name']}'. "
+                        f"Please rephrase your answer.", "System")
                     user_nlu_response = None
         return user_nlu_response
 
