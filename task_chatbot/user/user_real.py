@@ -28,6 +28,7 @@ class User(object):
         self.turn = 0
         self.user_action = UserAction()
         self.request_slots = []
+        self.latest_agent_slot = dia_config.config.default_start_slot
         self.constraint_check = False
 
     def get_action(self, agent_action):
