@@ -27,6 +27,7 @@ class IntentEntityClassifier:
 
         for pattern, intent, entity_keys in regex_entries:
             entity_dict = {}
+            pattern = f"^{pattern}$"
             if re.match(pattern, utterance):
                 match = re.search(pattern, utterance)
                 groups = match.groups()
