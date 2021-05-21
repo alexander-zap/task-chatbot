@@ -8,7 +8,7 @@
       ]
     },
     {
-      "pattern": "ich möchte (.*) als (.*)",
+      "pattern": "ich möchte(?: gerne| bitte)? (.*) als (.*)",
       "intent": "inform",
       "entities": [
         "slot_value",
